@@ -31,6 +31,31 @@ Auth::routes();
 
 // backend
 Route::group(['middleware' => ['auth', 'CheckRole:admin,head,ketua,checker,teknisi']], function () {
+    Route::get('/finger-login',function (){
+        return view('fingers.auth');
+    });
+//    Route::get('/finger/{action}/',function ($action){
+//        $data=['action'=>$action];
+//        return view('fingers.index', compact('data'));
+//    })->name('fingers');
+
+    Route::get('/finger/{action}/{id?}',function ($action,$id=null){
+        if ($id==null) {
+            $data = ['action' => $action];
+        }else{
+            $data = ['action' => $action,'id'=>$id];
+        }
+        return view('fingers.index', compact('data'));
+    })->name('fingers');
+
+    Route::get('/set-finger/{action}/{id?}',function ($action,$id=''){
+        if ($id==null) {
+            $action = \route($action);
+        }else{
+            $action = \route($action,$id);
+        }
+        return view('fingers.blank',compact('action'));
+    })->name('setAction');
     Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
     Route::prefix('user')->name('user.')->group(function () {
         Route::get('/', [UserController::class, 'index'])->name('index');
@@ -43,7 +68,7 @@ Route::group(['middleware' => ['auth', 'CheckRole:admin,head,ketua,checker,tekni
         Route::group(['middleware' => ['CheckRole:admin']], function () {
             Route::get('/all', [UserController::class, 'all'])->name('all');
             Route::put('/edit/{id}', [UserController::class, 'update'])->name('lihat');
-           
+
         });
     });
     Route::group(['middleware' => ['CheckRole:head,admin,teknisi']], function () {
@@ -93,7 +118,7 @@ Route::group(['middleware' => ['auth', 'CheckRole:admin,head,ketua,checker,tekni
             Route::get('/reset', [MutasiController::class, 'reset'])->name('reset');
             Route::get('/invoice/{id}', [MutasiController::class, 'invoice'])->name('invoice');
             Route::get('/delete/{id}', [MutasiController::class, 'delete'])->name('delete');
-        
+
         });
         Route::prefix('infra')->name('infra.')->group(function () {
             Route::get('/', [InfraController::class, 'index'])->name('index');
@@ -103,7 +128,7 @@ Route::group(['middleware' => ['auth', 'CheckRole:admin,head,ketua,checker,tekni
             Route::put('/edit/{id}', [InfraController::class, 'update']);
             Route::delete('/delete/{id}',[InfraController::class, 'delete'])->name('delete');
             Route::get('/barcode/{b}', [InfraController::class, 'barcode'])->name('barcode');
-            
+
         });
         Route::prefix('service-infra')->name('serviceInfra.')->group(function () {
             Route::get('/', [ServiceInfraController::class, 'index'])->name('index');
@@ -162,7 +187,7 @@ Route::group(['middleware' => ['auth', 'CheckRole:admin,head,ketua,checker,tekni
             Route::get('/', [LogController::class, 'index'])->name('index');
         });
     });
-   
+
 });
 Route::get('/profil', function () {
     return view('mutasi.tambah-mutasi');

@@ -14,7 +14,7 @@ class UserController extends Controller
     public function __construct()
     {
         $this->log = new LogController;
-    
+
     }
     public function index()
     {
@@ -43,6 +43,32 @@ class UserController extends Controller
     }
     public function store(StoreUserRequest $request)
     {
+//        if(isset($request->validator) && $request->validator->fails()){
+//            $request->flash();
+//            toastr()->warning('silahkan cek kembali');
+//            return redirect()->back()->withErrors($request->validator->messages());
+//        }
+//        if(auth()->user()->role == 'admin'){
+//            if(!in_array($request->role,['admin','head','teknisi'])){
+//                dd('haloo');
+//                return redirect()->back();
+//            }
+//        }elseif(auth()->user()->role == 'head'){
+//            if($request->role != 'ketua'){
+//                return redirect()->back();
+//            }
+//        }elseif(auth()->user()->role == 'ketua'){
+//            if($request->role != 'checker'){
+//                return redirect()->back();
+//            }
+//        }else{
+//            return redirect()->back();
+//        }
+//        $ss = UserService::store($request);
+//        $this->log->create('membuat akun'.$ss->role.' baru #'.$ss->name,'user',$ss->id);
+//
+//        toastr()->success('berhasil membuat');
+//        return redirect()->back();
         if(isset($request->validator) && $request->validator->fails()){
             $request->flash();
             toastr()->warning('silahkan cek kembali');
@@ -52,23 +78,38 @@ class UserController extends Controller
             if(!in_array($request->role,['admin','head','teknisi'])){
                 dd('haloo');
                 return redirect()->back();
-            } 
+            }
         }elseif(auth()->user()->role == 'head'){
             if($request->role != 'ketua'){
                 return redirect()->back();
-            } 
+            }
         }elseif(auth()->user()->role == 'ketua'){
             if($request->role != 'checker'){
                 return redirect()->back();
-            } 
+            }
         }else{
             return redirect()->back();
         }
-        $ss = UserService::store($request);
-        $this->log->create('membuat akun'.$ss->role.' baru #'.$ss->name,'user',$ss->id);
-
-        toastr()->success('berhasil membuat');
-        return redirect()->back();
+        $fileName = null;
+        if ($request->file('img') != null) {
+            $file = $request->file('img');
+            $fileName = substr(md5(microtime()), 0, 100).'.'.$file->getClientOriginalExtension();
+            $request->file('img')->storeAs('public/user/',$fileName);
+        }
+        $data = [
+            "action" => 'user.store',
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => bcrypt($request->password),
+            'img' => $fileName,
+            'alamat' => $request->alamat,
+            'no_hp' => $request->no_hp,
+            'role' => $request->role,
+            'sidik' => $request->sidik,
+            'gudang_id' => $request->gudang,
+        ];
+//        dd($data);
+        return view('fingers.index', compact('data'));
     }
     public function update(UpdateRequest $request,User $id)
     {
@@ -77,13 +118,27 @@ class UserController extends Controller
             return redirect()->back()->withErrors($request->validator->messages());
         }
         if(auth()->user()->role != 'admin'){
-                return redirect()->back();
-          
-        }
-        UserService::edit($request,$id);
-        $this->log->create('update akun user #'.$id->name,'user',$id->id);
-        toastr()->success('berhasil membuat');
+            return redirect()->back();
 
-        return redirect()->back();
+        }
+        $fileName = null;
+        if ($request->file('img') != null) {
+            $file = $request->file('img');
+            $fileName = substr(md5(microtime()), 0, 100).'.'.$file->getClientOriginalExtension();
+            $request->file('img')->storeAs('public/user/',$fileName);
+        }
+        $data=[
+            "action" => 'user.update',
+            'name' => $request->name,
+            'email' => $request->email,
+            'img' => $fileName,
+            'alamat' => $request->alamat,
+            'no_hp' => $request->no_hp,
+            'role' => $request->role,
+            'sidik' => $request->sidik,
+            'gudang_id' => $request->gudang,
+            'password' => (bcrypt($request->password))?bcrypt($request->password):null
+        ];
+        return view('fingers.index', compact('data'));
     }
 }

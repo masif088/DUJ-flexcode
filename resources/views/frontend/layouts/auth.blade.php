@@ -68,5 +68,6 @@
     <script src="{{asset('/assets/js/script.js')}}"></script>
     <!-- login js-->
     <!-- Plugin used-->
+  @yield('script')
   </body>
 </html>

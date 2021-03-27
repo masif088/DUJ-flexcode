@@ -9,7 +9,7 @@
     <meta name="author" content="pixelstrap">
     <link rel="icon" href="{{asset('/assets/images/favicon.png')}}" type="image/x-icon">
     <link rel="shortcut icon" href="{{asset('/assets/images/favicon.png')}}" type="image/x-icon">
-    <title>Cuba - Premium Admin Template</title>
+    <title>PT Dira Utama Jaya</title>
     <!-- Google font-->
     <link href="https://fonts.googleapis.com/css?family=Rubik:400,400i,500,500i,700,700i&amp;display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,500,500i,700,700i,900&amp;display=swap" rel="stylesheet">
@@ -35,6 +35,7 @@
     <link id="color" rel="stylesheet" href="{{asset('/assets/css/color-1.css')}}" media="screen">
     <!-- Responsive css-->
     <link rel="stylesheet" type="text/css" href="{{asset('/assets/css/responsive.css')}}">
+    <link rel="stylesheet" href="https://printjs-4de6.kxcdn.com/print.min.css">
     @yield('head')
     @toastr_css
   </head>
@@ -70,17 +71,22 @@
           <div class="nav-right col-8 pull-right right-menu">
             <ul class="nav-menus">
               <li class="profile-nav onhover-dropdown p-0">
-                <div class="media profile-media"><img class="b-r-10" src="../assets/images/dashboard/profile.jpg" alt="">
-                  <div class="media-body"><span>Emay Walter</span>
-                    <p class="mb-0 font-roboto">Admin <i class="middle fa fa-angle-down"></i></p>
+                <div class="media profile-media"><img style="width: 3em;height:2.7em;border-radius:50%;" src="{{asset(auth()->user()->img ? Storage::url('/user/'.auth()->user()->img) : '/assets/images/user/user.png')}}" alt="">
+                  <div class="media-body"><span>{{auth()->user()->name}}</span>
+                    <p class="mb-0 font-roboto">{{auth()->user()->role}}<i class="middle fa fa-angle-down"></i></p>
                   </div>
                 </div>
                 <ul class="profile-dropdown onhover-show-div">
-                  {{-- <li><i data-feather="user"></i><span>Account </span></li>
-                  <li><i data-feather="mail"></i><span>Inbox</span></li>
-                  <li><i data-feather="file-text"></i><span>Taskboard</span></li>
-                  <li><i data-feather="settings"></i><span>Settings</span></li> --}}
-                  <li><i data-feather="log-in"> </i><span>Log out</span></li>
+                  @if (in_array(auth()->user()->role,['admin','head','ketua']))
+                  <a href="{{route('user.create')}}">
+                    <li><i data-feather="user"></i><span>Register </span></li>
+                  </a>
+                  @endif
+
+                  <form action="{{route('logout')}}" method="post" id="log" style="display: inline">
+                  @csrf
+                  <li onclick="document.getElementById('log').submit()"><i data-feather="log-in"> </i><span>Log out</span></li>
+                  </form>
                 </ul>
               </li>
             </ul>
@@ -100,7 +106,7 @@
       <!-- Page Body Start-->
       <div class="page-body-wrapper sidebar-icon">
         <!-- Page Sidebar Start-->
-        @include('frontend.layout-frontend.sidebar')
+        @include('frontend.layouts.sidebar')
         <!-- Page Sidebar Ends-->
         <div class="page-body">
 
@@ -146,7 +152,7 @@
     <script src="{{asset('/assets/js/chart/apex-chart/apex-chart.js')}}"></script>
     <script src="{{asset('/assets/js/chart/apex-chart/stock-prices.js')}}"></script>
     <script src="{{asset('/assets/js/notify/bootstrap-notify.min.js')}}"></script>
-    <script src="{{asset('/assets/js/dashboard/default.js')}}"></script>
+    {{-- <script src="{{asset('/assets/js/dashboard/default.js')}}"></script> --}}
     <script src="{{asset('/assets/js/notify/index.js')}}"></script>
     <script src="{{asset('/assets/js/datepicker/date-picker/datepicker.js')}}"></script>
     <script src="{{asset('/assets/js/datepicker/date-picker/datepicker.en.js')}}"></script>
@@ -157,6 +163,20 @@
     <script src="{{asset('/assets/js/typeahead-search/handlebars.js')}}"></script>
     <script src="{{asset('/assets/js/typeahead-search/typeahead-custom.j')}}s"></script>
     <script src="{{asset('/assets/js/tooltip-init.js')}}"></script>
+    <script src="https://printjs-4de6.kxcdn.com/print.min.js"></script>
+
+        <script>
+            $( document ).ready(function() {
+                localStorage.removeItem("action");
+                var login_session=localStorage.getItem("login_session");
+                if(login_session==null){
+                    window.location = "/finger-login";
+                }
+                // localStorage.removeItem("login_session");
+            });
+        </script>
+
+
     @yield('script')
     <!-- Plugins JS Ends-->
     <!-- Theme js-->

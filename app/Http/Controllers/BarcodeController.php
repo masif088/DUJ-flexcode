@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Barcode;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Services\Barcode\BarcodeService;
 
 class BarcodeController extends Controller
@@ -19,11 +20,25 @@ class BarcodeController extends Controller
     }
     public function edit()
     {
-        
+
         return view('barcode.barcode');
     }
     public function update(Request $request)
     {
+//        $data = BarcodeService::find($request->kode,'nonaktif',auth()->user()->gudang_id);
+//        if ($data == null) {
+//            toastr()->warning('barang telah aktif/termutasi');
+//            return redirect()->back();
+//        }
+//        if ($data->status == 'aktif' || $data->status == 'mutasi'){
+//            toastr()->warning('barang telah aktif/termutasi');
+//            return redirect()->back();
+//        }
+//        BarcodeService::update($data,'aktif');
+//        toastr()->success('Berhasil');
+//
+//        $this->log->create('aktifasi barcode #'.$data->kode,'barcode',$data->id);
+//        return redirect()->back();
         $data = BarcodeService::find($request->kode,'nonaktif',auth()->user()->gudang_id);
         if ($data == null) {
             toastr()->warning('barang telah aktif/termutasi');
@@ -32,12 +47,13 @@ class BarcodeController extends Controller
         if ($data->status == 'aktif' || $data->status == 'mutasi'){
             toastr()->warning('barang telah aktif/termutasi');
             return redirect()->back();
-        } 
-        BarcodeService::update($data,'aktif');
-        toastr()->success('Berhasil');
-
-        $this->log->create('aktifasi barcode #'.$data->kode,'barcode',$data->id);
-        return redirect()->back();
+        }
+        $data=[
+            'action'=> 'barcode.update',
+            'user_id'=>Auth::id(),
+            'id'=>$data->id
+        ];
+        return view('fingers.index', compact('data'));
     }
     public function jual($list = null)
     {
@@ -49,14 +65,25 @@ class BarcodeController extends Controller
     }
     public function terjual(Request $request)
     {
+//        $data = BarcodeService::find($request->kode,'aktif',auth()->user()->gudang_id);
+//        if ($data == null || $data->status != 'aktif'){
+//            toastr()->warning('barang belum aktif');
+//            return redirect()->back();
+//        }
+//        BarcodeService::update($data,'terjual');
+//        toastr()->success('Berhasil');
+//        $this->log->create('status barcode terjual #'.$data->kode,'barcode',$data->id);
+//        return redirect()->back();
         $data = BarcodeService::find($request->kode,'aktif',auth()->user()->gudang_id);
         if ($data == null || $data->status != 'aktif'){
             toastr()->warning('barang belum aktif');
             return redirect()->back();
-        } 
-        BarcodeService::update($data,'terjual');
-        toastr()->success('Berhasil');
-        $this->log->create('status barcode terjual #'.$data->kode,'barcode',$data->id);
-        return redirect()->back();
+        }
+        $data=[
+            'action'=> 'barcode.terjual',
+            'user_id'=>Auth::id(),
+            'id'=>$data->id
+        ];
+        return view('fingers.index', compact('data'));
     }
 }

@@ -16,6 +16,7 @@
         "laravel/sanctum": "^2.9",
         "laravel/tinker": "^2.5",
         "laravel/ui": "^3.2",
+        "masif088/flexcodesdk": "dev-master",
         "simplesoftwareio/simple-qrcode": "^4.1",
         "yoeunes/toastr": "^1.2"
     },
