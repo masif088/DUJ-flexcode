@@ -32,12 +32,14 @@
                     <option value="admin">admin</option>
                     <option value="head">Head office</option>
                     <option value="teknisi">teknisi</option>
-                    @endif
-                    @if (auth()->user()->role == "head")
+{{--                    @endif--}}
+{{--                    @if (auth()->user()->role == "head")--}}
                     <option value="ketua">ketua cabang</option>
-                    @endif
-                    @if (auth()->user()->role == "ketua")
+{{--                    @endif--}}
+{{--                    @if (auth()->user()->role == "ketua")--}}
                     <option value="checker">Checker</option>
+                          <option value="monitor">Monitor</option>
+
                     @endif
 
                   </select>

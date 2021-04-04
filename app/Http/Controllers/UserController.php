@@ -74,22 +74,22 @@ class UserController extends Controller
             toastr()->warning('silahkan cek kembali');
             return redirect()->back()->withErrors($request->validator->messages());
         }
-        if(auth()->user()->role == 'admin'){
-            if(!in_array($request->role,['admin','head','teknisi'])){
-                dd('haloo');
-                return redirect()->back();
-            }
-        }elseif(auth()->user()->role == 'head'){
-            if($request->role != 'ketua'){
-                return redirect()->back();
-            }
-        }elseif(auth()->user()->role == 'ketua'){
-            if($request->role != 'checker'){
-                return redirect()->back();
-            }
-        }else{
-            return redirect()->back();
-        }
+//        if(auth()->user()->role == 'admin'){
+//            if(!in_array($request->role,['admin','head','teknisi'])){
+//                dd('haloo');
+//                return redirect()->back();
+//            }
+//        }elseif(auth()->user()->role == 'head'){
+//            if($request->role != 'ketua'){
+//                return redirect()->back();
+//            }
+//        }elseif(auth()->user()->role == 'ketua'){
+//            if($request->role != 'checker'){
+//                return redirect()->back();
+//            }
+//        }else{
+//            return redirect()->back();
+//        }
         $fileName = null;
         if ($request->file('img') != null) {
             $file = $request->file('img');

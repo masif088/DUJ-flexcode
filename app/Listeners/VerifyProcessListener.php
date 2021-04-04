@@ -147,7 +147,7 @@ class VerifyProcessListener
                     'role' => $data->data['extras']['role'],
                     'gudang_id' => $data->data['extras']['gudang_id'],
                 ]);
-                self::log($data->data['extras']['user_id'],'membuat akun'.$ss->role.' baru #'.$ss->name,'user',$ss->id);
+                self::log($data->data['extras']['user_id'],'membuat akun '.$ss->role.' baru #'.$ss->name,'user',$ss->id);
                 echo route('setAction', 'user.create');
                 break;
             case 'user.update':

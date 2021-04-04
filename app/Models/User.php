@@ -28,7 +28,8 @@ class User extends Authenticatable
         'role',
         'sidik',
         'gudang_id',
-        'token'
+        'token',
+        'fingerprints'
     ];
     protected function serializeDate(DateTimeInterface $date)
     {

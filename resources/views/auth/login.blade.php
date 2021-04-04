@@ -97,3 +97,10 @@
     </div>
   </div>
 @endsection
+@section('script')
+    <script>
+        $( document ).ready(function() {
+            localStorage.removeItem("login_session");
+        });
+    </script>
+@endsection

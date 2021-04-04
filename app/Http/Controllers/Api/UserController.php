@@ -20,7 +20,7 @@ class UserController extends Controller
     function login(Request $request)
     {
         $user = User::where(function($z){
-            $z->where('role','ketua')->orWhere('role','checker');
+            $z->where('role','ketua')->orWhere('role','checker')->orWhere('role','monitor');;
         })->where('email', $request->email)->first();
         // print_r($data);
         if (!$user || !Hash::check($request->password, $user->password)) {
@@ -45,7 +45,7 @@ class UserController extends Controller
     }
     public function isAuth()
     {
-      
+
         $status = null;
         $data=null;
         $statuscode = null;
@@ -95,35 +95,35 @@ class UserController extends Controller
                     'status' => 'error',
                     'msg' => 'role yang anda maskan tidak sesuai',
                 ],404);
-            } 
+            }
         }elseif(auth('sanctum')->user()->role == 'head'){
             if(!in_array($request->role,['ketua','head'])){
                 return response()->json([
                     'status' => 'error',
                     'msg' => 'role yang anda maskan tidak sesuai',
                 ],404);
-            } 
+            }
         }elseif(auth('sanctum')->user()->role == 'ketua'){
             if(!in_array($request->role,['ketua','checker'])){
                 return response()->json([
                     'status' => 'error',
                     'msg' => 'role yang anda maskan tidak sesuai',
                 ],404);
-            } 
+            }
         }elseif(auth('sanctum')->user()->role == 'checker'){
             if($request->role != 'checker'){
                 return response()->json([
                     'status' => 'error',
                     'msg' => 'role yang anda maskan tidak sesuai',
                 ],404);
-            } 
+            }
         }elseif(auth('sanctum')->user()->role == 'teknisi'){
             if($request->role != 'teknisi'){
                 return response()->json([
                     'status' => 'error',
                     'msg' => 'role yang anda maskan tidak sesuai',
                 ],404);
-            } 
+            }
         }else{
             return response()->json([
                     'status' => 'error',

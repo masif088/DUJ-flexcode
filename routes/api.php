@@ -11,6 +11,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\MonitorController;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,6 +33,9 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::put('/edit',[ApiUserController::class,'edit']);
         Route::put('/delete',[ApiUserController::class,'delete']);
     });
+    Route::prefix('monitor')->group(function () {
+        Route::get('/', [MonitorController::class, 'index']);
+    });
     Route::prefix('masuk')->group(function () {
         Route::get('/riwayat',[MasukController::class,'riwayat']);
         Route::post('/create',[MasukController::class,'store']);
@@ -42,7 +46,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::get('/status/terjual',[BarangController::class,'status']);
         Route::post('/terjual',[BarangController::class,'terjual']);
 
-        
+
     });
     Route::prefix('mutasi')->group(function () {
         Route::get('/riwayat',[MutasiController::class,'riwayat']);

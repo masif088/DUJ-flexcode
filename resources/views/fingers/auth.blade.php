@@ -224,14 +224,12 @@
     $(document).ready(function () {
         function waiting() {
             var action = localStorage.getItem("action");
-            console.log(action);
             if (action != null) {
                 window.location = action;
             } else {
                 setTimeout(waiting, 3000);
             }
         }
-
         waiting();
     });
 </script>

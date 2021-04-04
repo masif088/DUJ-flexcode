@@ -194,7 +194,7 @@
         localStorage.removeItem("action");
         var login_session = localStorage.getItem("login_session");
         if (login_session == null) {
-            window.location = "/finger-login";
+            window.location = "{{route('finger.login')}}";
         }
         // localStorage.removeItem("login_session");
     });

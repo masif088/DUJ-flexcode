@@ -6,6 +6,7 @@ use App\Http\Controllers\BarcodeController;
 use App\Http\Controllers\GudangController;
 use App\Http\Controllers\InfraController;
 use App\Http\Controllers\LogController;
+
 use App\Http\Controllers\MasukController;
 use App\Http\Controllers\MutasiController;
 use App\Http\Controllers\ServiceAfterController;
@@ -33,7 +34,7 @@ Auth::routes();
 Route::group(['middleware' => ['auth', 'CheckRole:admin,head,ketua,checker,teknisi']], function () {
     Route::get('/finger-login',function (){
         return view('fingers.auth');
-    });
+    })->name('finger.login');
 //    Route::get('/finger/{action}/',function ($action){
 //        $data=['action'=>$action];
 //        return view('fingers.index', compact('data'));
